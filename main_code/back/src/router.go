@@ -56,7 +56,7 @@ func (s *Service) RouterInit() {
 	image := r.Group("/backgroundImage")
 	//image.Use(JWT())
 	{
-		image.GET("",requestEntryDefault(s.getImage))
+		image.GET("",s.getImage)
 	}
 
 	s.Router = r

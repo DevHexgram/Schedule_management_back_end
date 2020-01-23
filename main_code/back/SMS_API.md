@@ -249,18 +249,10 @@ Success(200):
 
 ## 获取随机背景图片
 
-#### GET `/backgroundImage` 
 
-```json
-{
-    "data": {
-        "URL": "http://schmanimage.sweetbeecr.com/test3",
-        "created_at": "2020-01-21T19:24:55+08:00"
-    },
-    "error": 0,
-    "msg": "success"
-}
-```
+#### GET `/backgroundImage`
+
+直接重定向到图片所在的URL
 
 
 ## 错误码对照表

@@ -3,11 +3,12 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"math/rand"
+	"net/http"
 	"time"
 )
 
 
-func (s *Service) getImage(c *gin.Context) (int, interface{}) {
+func (s *Service) getImage(c *gin.Context) {
 	var sum int
 	s.DB.Table("image_urls").Count(&sum)
 	//fmt.Println(sum)
@@ -19,6 +20,7 @@ func (s *Service) getImage(c *gin.Context) (int, interface{}) {
 
 	tempImageURL := new(imageURL)
 	s.DB.Table("image_urls").Where("id = ?",tempID).Find(tempImageURL)
-	return makeSuccessReturn(200,gin.H{"URL":tempImageURL.URL,"created_at":tempImageURL.CreatedAt})
+	c.Redirect(http.StatusFound,tempImageURL.URL)
+	//return makeSuccessReturn(200,gin.H{"URL":tempImageURL.URL,"created_at":tempImageURL.CreatedAt})
 }
 
