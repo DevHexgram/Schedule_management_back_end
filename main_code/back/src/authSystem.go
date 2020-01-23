@@ -39,7 +39,7 @@ func (s *Service) register(c *gin.Context) (int, interface{}) {
 	}
 	tx.Commit()
 
-	token, err := GenerateToken(tempUser.Username)
+	token, err := GenerateToken(tempUser.Username,3)
 	if err != nil {
 		//fmt.Println(err)
 		return makeErrorReturn(500, 50010, "Can't Generate Token")
@@ -60,7 +60,7 @@ func (s *Service) login(c *gin.Context) (int, interface{}) {
 		return makeErrorReturn(404, 40410, "Username or Password Wrong")
 	}
 
-	token, err := GenerateToken(tempUser.Username)
+	token, err := GenerateToken(tempUser.Username,3)
 	if err != nil {
 		return makeErrorReturn(500, 50010, "Can't Generate Token")
 	}

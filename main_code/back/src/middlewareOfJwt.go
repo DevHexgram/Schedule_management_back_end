@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"time"
 )
@@ -30,7 +31,16 @@ func JWT() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
+
+		if claims.Authority==0 || claims.Username=="" {
+			c.JSON(makeErrorReturn(302,30200,"Token Format Changed"))
+			c.Abort()
+			return
+		}
+
+		fmt.Println(claims)
 		c.Set("owner",claims.Username)
+		c.Set("authority",claims.Authority)
 		c.Next()
 	}
 }

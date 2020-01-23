@@ -8,17 +8,19 @@ import (
 
 type Claims struct {
 	Username string `json:"username"`
+	Authority int `json:"authority"`
 	jwt.StandardClaims
 }
 
 var jwtSecret = []byte("lmx-Hexagram_and_legends-killer")
 
-func GenerateToken(username string) (string, error) {
+func GenerateToken(username string,authority int) (string, error) {
 	nowTime := time.Now()
 	expireTime := nowTime.Add(7 * time.Hour * 24)
 
 	claims := Claims{
 		Username: username,
+		Authority:authority,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
 			Issuer:    "Sch_man",
@@ -37,7 +39,7 @@ func ParseToken(token string) (*Claims, error) {
 		return jwtSecret, nil
 	})
 
-	fmt.Println(tokenClaims)
+	//fmt.Println(tokenClaims)
 
 	if tokenClaims != nil {
 		claims, ok := tokenClaims.Claims.(*Claims)

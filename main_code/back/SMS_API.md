@@ -271,6 +271,7 @@ Success(200):
 |错误码对照表|含义|msg|
 ---|---|---|
 |30200|token过期,需要重新登陆|`Token Expired`|
+|30210|token格式更改,请重新登陆|`Token Format Changed`|
 |40000|json格式错误|`Wrong Format Of JSON`|
 |40010|Header错误|`Wrong Format Of Header`|
 |40020|无效Token|`Wrong Format of Token`|

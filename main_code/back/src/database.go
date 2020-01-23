@@ -12,6 +12,7 @@ type User struct {
 	gorm.Model
 	Username string
 	Password string
+	Authority int
 }
 
 type affair struct {
