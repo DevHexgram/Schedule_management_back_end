@@ -24,7 +24,7 @@ baseURL:`localhost:12210`
 ## 前置条件
 
 
-除了登陆和注册,所有请求需要在`Header`中带上`token`
+除了登陆和注册,所有请求需要在`Header`的`Authorization`中带上`token`
 
 
 
