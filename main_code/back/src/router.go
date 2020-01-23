@@ -12,6 +12,16 @@ func (s *Service) RouterInit() {
 	r := gin.Default()
 	r.Use(CorsMiddleware())
 
+
+	admin := r.Group("/@dmInSchM@n")
+	admin.Use(JWT(),authorityControl(8))
+	{
+		admin.GET("/listInvitationCode",requestEntryDefault(s.listInvitationCode))
+		admin.POST("/GenerateInvitationCode")
+		admin.GET("/getPictureLink")
+		admin.POST("/addPictureLink")
+	}
+
 	auth := r.Group("/auth")
 	{
 		auth.POST("/login",requestEntryDefault(s.login))

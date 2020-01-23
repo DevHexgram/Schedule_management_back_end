@@ -276,6 +276,7 @@ Success(200):
 |40010|Header错误|`Wrong Format Of Header`|
 |40020|无效Token|`Wrong Format of Token`|
 |40030|用户名重复|`Duplicate username`|
+|40040|用户权限不足|`Poor Authority`|
 |40400|传入的参数无法解析|`Unable To Parse Parameters`|
 |40410|用户名或者密码错误|`Username or Password Wrong`|
 |40420|邀请码错误|`Invitation Code Wrong`|
