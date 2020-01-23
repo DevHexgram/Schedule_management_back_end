@@ -8,6 +8,7 @@ type InputUser struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Code     string `json:"code"`
+	Authority int `json:"authority"`
 }
 
 func (s *Service) register(c *gin.Context) (int, interface{}) {
@@ -33,6 +34,7 @@ func (s *Service) register(c *gin.Context) (int, interface{}) {
 	if tx.Create(&User{
 		Username: tempUser.Username,
 		Password: tempUser.Password,
+		Authority:3,
 	}).RowsAffected != 1 {
 		tx.Rollback()
 		return makeErrorReturn(500, 50000, "Can't Insert Into Database")
@@ -60,7 +62,7 @@ func (s *Service) login(c *gin.Context) (int, interface{}) {
 		return makeErrorReturn(404, 40410, "Username or Password Wrong")
 	}
 
-	token, err := GenerateToken(tempUser.Username,3)
+	token, err := GenerateToken(tempUser.Username,dbUser.Authority)
 	if err != nil {
 		return makeErrorReturn(500, 50010, "Can't Generate Token")
 	}
