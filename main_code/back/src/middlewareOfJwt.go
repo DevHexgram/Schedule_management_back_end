@@ -33,7 +33,7 @@ func JWT() gin.HandlerFunc {
 		}
 
 		if claims.Authority==0 || claims.Username=="" {
-			c.JSON(makeErrorReturn(302,30200,"Token Format Changed"))
+			c.JSON(makeErrorReturn(302,30210,"Token Format Changed"))
 			c.Abort()
 			return
 		}
