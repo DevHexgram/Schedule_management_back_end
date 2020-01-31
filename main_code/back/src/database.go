@@ -20,7 +20,7 @@ type affair struct {
 	Title    string
 	Deadline time.Time
 	Extra    string
-	Owner string
+	//Owner string
 	UserId uint
 }
 
@@ -29,7 +29,7 @@ type dailyEvent struct {
 	Title string
 	Extra string
 	//Owner string
-	userId uint
+	UserId uint
 }
 
 type imageURL struct {

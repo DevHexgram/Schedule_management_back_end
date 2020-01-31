@@ -29,7 +29,7 @@ func (s *Service) addDailyEvents(c *gin.Context, userId uint) (int, interface{})
 		Title: temp.Title,
 		Extra: temp.Extra,
 		//Owner: owner,
-		userId:userId,
+		UserId:userId,
 	}).RowsAffected != 1 {
 		tx.Rollback()
 		return makeErrorReturn(500, 50000, "Can't Insert Into Database")

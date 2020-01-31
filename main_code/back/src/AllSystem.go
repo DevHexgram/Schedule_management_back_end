@@ -4,7 +4,7 @@ import "github.com/gin-gonic/gin"
 
 func (s *Service) getDailyEvents(c *gin.Context,userId uint) (int,interface{}){
 	data := make([]*dailyEvent,0)
-	s.DB.Table("daily_events").Where("user_id",userId).Find(&data)
+	s.DB.Table("daily_events").Where("user_id = ?",userId).Find(&data)
 	return makeSuccessReturn(200,data)
 }
 
