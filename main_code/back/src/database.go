@@ -10,7 +10,7 @@ import (
 
 type User struct {
 	gorm.Model
-	Username string
+	Username string `gorm:"unique;not null"`
 	Password string
 	Authority int
 }
@@ -21,18 +21,26 @@ type affair struct {
 	Deadline time.Time
 	Extra    string
 	Owner string
+	UserId uint
 }
 
 type dailyEvent struct {
 	gorm.Model
 	Title string
 	Extra string
-	Owner string
+	//Owner string
+	userId uint
 }
 
 type imageURL struct {
 	gorm.Model
 	URL string
+}
+
+type userStatus struct {
+	gorm.Model
+	UserID uint
+	BackgroundStatus int //1:color ; 2:URL image ; 3:customize image
 }
 
 type InvitationCode struct {

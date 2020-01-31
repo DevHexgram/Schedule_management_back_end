@@ -21,7 +21,7 @@ type output struct {
 	CreatedAt string `json:"created_at"`
 }
 
-func (s *Service) addAffair(c *gin.Context, owner string) (int, interface{}) {
+func (s *Service) addAffair(c *gin.Context, userId uint) (int, interface{}) {
 	temp := new(input)
 	err := c.BindJSON(temp)
 	//DealError(err)
@@ -35,7 +35,8 @@ func (s *Service) addAffair(c *gin.Context, owner string) (int, interface{}) {
 		Title:    temp.Title,
 		Deadline: temp.Deadline,
 		Extra:    temp.Extra,
-		Owner:    owner,
+		//Owner:    owner,
+		UserId:   userId,
 	}).RowsAffected != 1 {
 		tx.Rollback()
 		return makeErrorReturn(500, 50000, "Can't Insert Into Database")
@@ -45,7 +46,7 @@ func (s *Service) addAffair(c *gin.Context, owner string) (int, interface{}) {
 
 }
 
-func (s *Service) deleteAffair(c *gin.Context, owner string) (int, interface{}) {
+func (s *Service) deleteAffair(c *gin.Context, userId uint) (int, interface{}) {
 	tempID := c.Query("id")
 	if tempID == "" {
 		return makeErrorReturn(404, 40400, "Unable To Parse Parameters")
@@ -56,13 +57,13 @@ func (s *Service) deleteAffair(c *gin.Context, owner string) (int, interface{}) 
 	}
 
 	temp := new(affair)
-	s.DB.Where("id = ? AND owner = ?", id, owner).Find(temp)
+	s.DB.Where("id = ? AND user_id = ?", id, userId).Find(temp)
 	if temp.ID <= 0 {
 		return makeErrorReturn(404, 40430, "Not Found")
 	}
 
 	tx := s.DB.Begin()
-	if tx.Where("id = ? AND owner = ?", id, owner).Delete(&affair{}).RowsAffected != 1 {
+	if tx.Where("id = ? AND user_id = ?", id, userId).Delete(&affair{}).RowsAffected != 1 {
 		tx.Rollback()
 		return makeErrorReturn(500, 50000, "Can't Insert Into Database")
 	}
@@ -70,7 +71,7 @@ func (s *Service) deleteAffair(c *gin.Context, owner string) (int, interface{}) 
 	return makeSuccessReturn(200, "")
 }
 
-func (s *Service) modifyAffair(c *gin.Context, owner string) (int, interface{}) {
+func (s *Service) modifyAffair(c *gin.Context, userId uint) (int, interface{}) {
 	tempID := c.Query("id")
 	if tempID == "" {
 		return makeErrorReturn(404, 40400, "Unable To Parse Parameters")
@@ -81,7 +82,7 @@ func (s *Service) modifyAffair(c *gin.Context, owner string) (int, interface{}) 
 	}
 
 	temp := new(affair)
-	s.DB.Where("id = ? AND owner = ?", id, owner).Find(temp)
+	s.DB.Where("id = ? AND user_id = ?", id, userId).Find(temp)
 	//s.DB.Where(&affair{Model: gorm.Model{ID: id}}).Find(temp)
 	if temp.ID <= 0 {
 		return makeErrorReturn(404, 40430, "Not Found")
@@ -93,7 +94,7 @@ func (s *Service) modifyAffair(c *gin.Context, owner string) (int, interface{}) 
 		return makeErrorReturn(400, 40000, "Wrong Format Of JSON") //
 	}
 	tx := s.DB.Begin()
-	if tx.Model(&affair{}).Where("id = ? AND owner = ?", id, owner).Updates(&affair{
+	if tx.Model(&affair{}).Where("id = ? AND user_id = ?", id, userId).Updates(&affair{
 		//if tx.Where(&affair{Model: gorm.Model{ID: id}}).Updates(affair{
 		Title:    temp.Title,
 		Deadline: temp.Deadline,

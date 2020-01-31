@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"strconv"
 	"time"
 )
 
@@ -14,15 +15,17 @@ type Claims struct {
 
 var jwtSecret = []byte("lmx-Hexagram_and_legends-killer")
 
-func GenerateToken(username string,authority int) (string, error) {
+func GenerateToken(username string,authority int,id uint) (string, error) {
 	nowTime := time.Now()
 	expireTime := nowTime.Add(7 * time.Hour * 24)
+	strInt := strconv.Itoa(int(id))
 
 	claims := Claims{
 		Username: username,
 		Authority:authority,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
+			Id:strInt,
 			Issuer:    "Sch_man",
 		},
 	}

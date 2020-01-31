@@ -2,8 +2,8 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
+	"strconv"
 )
 
 //type toReturn func(*gin.Context)
@@ -64,15 +64,17 @@ func (s *Service) RouterInit() {
 	DealError(err)
 }
 
-func requestEntryWithStatus(f func(c *gin.Context,owner string) (int, interface{})) gin.HandlerFunc {
+func requestEntryWithStatus(f func(c *gin.Context,userId uint) (int, interface{})) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		tempOwner,exist:=c.Get("owner")
-		strOwner := fmt.Sprintf("%v",tempOwner)
-		if !exist {
+		//tempOwner,exist:=c.Get("owner")
+		//strOwner := fmt.Sprintf("%v",tempOwner)
+		strId := c.GetString("userId")
+		intId,err := strconv.Atoi(strId)
+		if err != nil {
 			c.JSON(makeErrorReturn(500,50020,"Middleware Wrong"))
 		}
 
-		c.JSON(f(c,strOwner))
+		c.JSON(f(c,uint(intId)))
 	}
 }
 

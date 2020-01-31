@@ -40,6 +40,8 @@ func JWT() gin.HandlerFunc {
 
 		fmt.Println(claims)
 		c.Set("owner",claims.Username)
+		c.Set("userId",claims.Id)
+		//fmt.Println(claims.Id)
 		c.Set("authority",claims.Authority)
 		c.Next()
 	}
