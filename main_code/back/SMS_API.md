@@ -7,9 +7,11 @@
 - [约定](#约定)
 - [前置条件](#前置条件)
 - [注册登陆](#注册登陆)
-- [总事务获取](#总事务获取)
-- [操作事务](#操作事务)
-- [操作每日任务](#操作每日任务)
+    - [获取用户状态](#获取用户状态背景图片等)
+    - [总事务获取](#总事务获取)
+    - [操作事务](#操作事务)
+    - [操作每日任务](#操作每日任务)
+- [获取随机背景图片](#获取随机背景图片)
 - [错误码对照表](#错误码对照表)
 
 
@@ -24,7 +26,7 @@ baseURL:`localhost:12210`
 ## 前置条件
 
 
-除了登陆和注册,所有请求需要在`Header`的`Authorization`中带上`token`
+除了**登陆,注册,背景图片API**,所有请求需要在`Header`的`Authorization`中带上`token`
 
 
 
@@ -67,6 +69,43 @@ success(200):
 {
     "data": {
         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RlciIsImV4cCI6MTU4MDIxMTc0NywiaXNzIjoiU2NoX21hbiJ9.nloucu6Cx4W0Xg5r54Uf-G0gixrrpaUoWZGAAAAAAAA"
+    },
+    "error": 0,
+    "msg": "success"
+}
+```
+
+
+## 获取用户状态(背景图片等)
+
+
+#### Get `/userStatus` 获取用户状态
+
+Success(200)
+```json
+{
+    "data": {
+        "BackgroundStatus": 1 //0:color ; 1:UrlImage ; 2:customize image 默认"0"
+    },
+    "error": 0,
+    "msg": "success"
+}
+```
+
+#### Post `/userStatus` 修改用户状态
+
+Payload:
+```json
+{
+	"background_status":1
+}
+```
+
+Success(200)
+```json
+{
+    "data": {
+        "BackgroundStatus": 1
     },
     "error": 0,
     "msg": "success"
@@ -273,6 +312,7 @@ Success(200):
 |40410|用户名或者密码错误|`Username or Password Wrong`|
 |40420|邀请码错误|`Invitation Code Wrong`|
 |40430|要操作的事务不存在|`Not Found`|
+|40440|用户状态不存在|`User Status Not Exist`|
 |50000|合法数据无法插入数据库|`Can't Insert Into Database`|
 |50010|生成token失败|`Can't Generate Token`|
 |50020|中间件出错|`Middleware Wrong`|

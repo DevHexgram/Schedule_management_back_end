@@ -98,6 +98,7 @@ ljz (also legends-killer):
     * 安全性提升
     * 权限管理雏形
     * 使用更友好的背景图片
+ * **v3.7.1**(开发中)
 
 
 *Go All Out To Win.*
