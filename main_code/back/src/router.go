@@ -22,10 +22,23 @@ func (s *Service) RouterInit() {
 		admin.POST("/addPictureLink")
 	}
 
+	image := r.Group("/backgroundImage")
+	//image.Use(JWT())
+	{
+		image.GET("",s.getImage)
+	}
+
 	auth := r.Group("/auth")
 	{
 		auth.POST("/login",requestEntryDefault(s.login))
 		auth.POST("/register",requestEntryDefault(s.register))
+	}
+
+	userStatus := r.Group("/userStatus")
+	userStatus.Use(JWT())
+	{
+		userStatus.POST("",requestEntryWithStatus(s.modifyUserStatus)) //改
+		userStatus.GET("",requestEntryWithStatus(s.getUserStatus)) //查
 	}
 
 	all := r.Group("/all")
@@ -51,12 +64,6 @@ func (s *Service) RouterInit() {
 		opera.DELETE("", requestEntryWithStatus(s.deleteAffair)) //删
 		opera.PUT("", requestEntryWithStatus(s.modifyAffair))    //改
 		//opera.GET("/find", s.findAffair) //查
-	}
-
-	image := r.Group("/backgroundImage")
-	//image.Use(JWT())
-	{
-		image.GET("",s.getImage)
 	}
 
 	s.Router = r

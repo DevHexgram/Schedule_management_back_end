@@ -40,7 +40,7 @@ type imageURL struct {
 type userStatus struct {
 	gorm.Model
 	UserID uint
-	BackgroundStatus int //1:color ; 2:URL image ; 3:customize image
+	BackgroundStatus int //0:color ; 1:URL image ; 2:customize image
 }
 
 type InvitationCode struct {
@@ -63,6 +63,7 @@ func (s *Service) DBInit()  {
 	db.AutoMigrate(&User{})
 	db.AutoMigrate(&InvitationCode{})
 	db.AutoMigrate(&imageURL{})
+	db.AutoMigrate(&userStatus{})
 	s.DB = db
 	//fmt.Println(s.DB)
 }

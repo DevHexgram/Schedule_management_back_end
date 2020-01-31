@@ -43,6 +43,16 @@ func (s *Service) register(c *gin.Context) (int, interface{}) {
 
 	s.DB.Table("users").Where("username = ? AND password = ?", tempUser.Username, tempUser.Password).Find(dbUser)
 
+	tx = s.DB.Begin()
+	if tx.Create(&userStatus{
+		UserID:           dbUser.ID,
+		BackgroundStatus: 0,
+	}).RowsAffected != 1 {
+		tx.Rollback()
+		return makeErrorReturn(500, 50000, "Can't Insert Into Database")
+	}
+	tx.Commit()
+
 	token, err := GenerateToken(dbUser.Username,dbUser.Authority,dbUser.ID)
 
 	if err != nil {
