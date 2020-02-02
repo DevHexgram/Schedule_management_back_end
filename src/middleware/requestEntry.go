@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-func RequestEntryWithStatus(f func(c *gin.Context, userId uint) (int, interface{})) gin.HandlerFunc {
+func RequestEntryWithStatus(f func(c *gin.Context, userId int) (int, interface{})) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		//tempOwner,exist:=c.Get("owner")
 		//strOwner := fmt.Sprintf("%v",tempOwner)
@@ -16,7 +16,7 @@ func RequestEntryWithStatus(f func(c *gin.Context, userId uint) (int, interface{
 			c.JSON(util.MakeErrorReturn(500, 50020, "Middleware Wrong"))
 		}
 
-		c.JSON(f(c, uint(intId)))
+		c.JSON(f(c, intId))
 	}
 }
 

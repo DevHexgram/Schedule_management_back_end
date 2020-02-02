@@ -16,30 +16,33 @@ type userSetting struct {
 }
 
 //注册
-func AddNewUser(password string, username string, authority int) (ok bool) {
+func AddNewUser(password string, username string, authority int) (tempUser *User,ok bool) {
 	tx := DB.Begin()
-	if tx.Create(&User{
+	tempUser = &User{
 		//Model:     gorm.Model{},
 		Username:  username,
 		Password:  password,
 		Authority: authority,
-	}).RowsAffected != 1 {
+	}
+	if tx.Create(tempUser).RowsAffected != 1 {
 		tx.Rollback()
 		ok = false
-		return
+		return nil,ok
 	}
 	tx.Commit()
 	ok = true
-	return
+	return tempUser,ok
 }
 
-//登陆
-func FindUser(password string, username string) {
-	tempUser := new(User)
+//登陆,返回 ok==false 代表失败
+func FindUser(password string, username string) (tempUser *User,ok bool){
 	DB.Where("username = ? AND password = ?",username,password).Find(tempUser)
 	if tempUser.ID <= 0 {
-
+		ok = false
+		return
 	}
+	ok = true
+	return
 }
 
 //查重,重复了返回true,无重复返回false

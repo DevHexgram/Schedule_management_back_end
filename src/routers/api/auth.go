@@ -30,71 +30,38 @@ func Register(c *gin.Context) (int, interface{}) {
 	}
 
 	//插入数据库
-	ok := models.AddNewUser(tempUser.Password, tempUser.Username, 3)
+	dBUser,ok := models.AddNewUser(tempUser.Password, tempUser.Username, 3)
 	if ok == false {
-		return util.MakeErrorReturn(e.InternalServerError,50000,e.GetMsg(50000))
+		return util.MakeErrorReturn(e.InternalServerError, 50000, e.GetMsg(50000))
 	}
 
-	tempInvitationCode := new(InvitationCode)
-	s.DB.Table("invitation_codes").Where("code = ?", tempUser.Code).Find(tempInvitationCode)
-	if tempInvitationCode.ID <= 0 {
-		return util.MakeErrorReturn(404, 40420, "Invitation Code Wrong")
-	}
-
-	dbUser := new(User)
-	s.DB.Table("users").Where("username = ?", tempUser.Username).Find(dbUser)
-	if dbUser.ID > 0 {
-		return util.MakeErrorReturn(400, 40030, "Duplicate username")
-	}
-
-	tx := s.DB.Begin()
-	if tx.Create(&User{
-		Username:  tempUser.Username,
-		Password:  tempUser.Password,
-		Authority: 3,
-	}).RowsAffected != 1 {
-		tx.Rollback()
-		return util.MakeErrorReturn(500, 50000, "Can't Insert Into Database")
-	}
-	tx.Commit()
-
-	s.DB.Table("users").Where("username = ? AND password = ?", tempUser.Username, tempUser.Password).Find(dbUser)
-
-	tx = s.DB.Begin()
-	if tx.Create(&userStatus{
-		UserID:           dbUser.ID,
-		BackgroundStatus: 0,
-	}).RowsAffected != 1 {
-		tx.Rollback()
-		return util.MakeErrorReturn(500, 50000, "Can't Insert Into Database")
-	}
-	tx.Commit()
-
-	token, err := util.GenerateToken(dbUser.Username, dbUser.Authority, dbUser.ID)
-
+	//生成token
+	token,err := util.GenerateToken(dBUser.Username, dBUser.Authority, dBUser.ID)
 	if err != nil {
-		//fmt.Println(err)
-		return util.MakeErrorReturn(500, 50010, "Can't Generate Token")
+		return util.MakeErrorReturn(e.InternalServerError,50010,e.GetMsg(50010))
 	}
+
 	return util.MakeSuccessReturn(200, gin.H{"token": token})
 }
 
 func Login(c *gin.Context) (int, interface{}) {
-	tempUser := new(InputUser)
-	err := c.BindJSON(tempUser)
-	if err != nil || tempUser.Username == "" || tempUser.Password == "" {
-		return util.MakeErrorReturn(400, 40000, "Wrong Format of JSON")
+	//解析并验证json
+	tempUserMsg := new(InputUser)
+	err := c.BindJSON(tempUserMsg)
+	if err != nil || tempUserMsg.Username == "" || tempUserMsg.Password == "" {
+		return util.MakeErrorReturn(e.BadRequest, 40000, e.GetMsg(40000))
 	}
 
-	dbUser := new(User)
-	s.DB.Table("users").Where("username = ? AND password = ?", tempUser.Username, tempUser.Password).Find(dbUser)
-	if dbUser.ID <= 0 {
-		return util.MakeErrorReturn(404, 40410, "Username or Password Wrong")
+	//验证登陆信息
+	dBUser, ok := models.FindUser(tempUserMsg.Password, tempUserMsg.Username)
+	if ok == false {
+		util.MakeErrorReturn(e.NotFound,40410,e.GetMsg(40410))
 	}
 
-	token, err := util.GenerateToken(dbUser.Username, dbUser.Authority, dbUser.ID)
+	//生成token
+	token,err := util.GenerateToken(dBUser.Username, dBUser.Authority, dBUser.ID)
 	if err != nil {
-		return util.MakeErrorReturn(500, 50010, "Can't Generate Token")
+		return util.MakeErrorReturn(e.InternalServerError,50010,e.GetMsg(50010))
 	}
 
 	return util.MakeSuccessReturn(200, gin.H{"token": token})

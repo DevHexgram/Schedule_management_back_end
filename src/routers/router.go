@@ -41,8 +41,8 @@ func RouterInit() *gin.Engine {
 	all := r.Group("/all")
 	all.Use(middleware.JWT())
 	{
-		all.GET("/affairs", middleware.RequestEntryWithStatus(s.getAllAffairs))
-		all.GET("/dailyAffairs", middleware.RequestEntryWithStatus(s.getDailyEvents))
+		all.GET("/affairs", middleware.RequestEntryWithStatus(api.GetAllAffairs))
+		all.GET("/dailyAffairs", middleware.RequestEntryWithStatus(api.GetAllDailyAffairs))
 	}
 
 	operaDaily := r.Group("/operaDaily")
