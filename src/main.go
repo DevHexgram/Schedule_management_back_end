@@ -1,12 +1,12 @@
 package main
 
 import (
-	"fmt"
-	"github.com/DevHexgram/Schedule_management_back_end/models"
+	_ "github.com/DevHexgram/Schedule_management_back_end/models"
 	"github.com/DevHexgram/Schedule_management_back_end/pkg/setting"
+	"github.com/DevHexgram/Schedule_management_back_end/routers"
 )
 
 func main() {
-	fmt.Println(models.DB)
-	fmt.Println(setting.Config)
+	r := routers.RouterInit()
+	r.Run(setting.Config.Web.Port)
 }

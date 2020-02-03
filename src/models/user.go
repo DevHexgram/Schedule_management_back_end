@@ -9,14 +9,8 @@ type User struct {
 	Authority int
 }
 
-type userSetting struct {
-	gorm.Model
-	UserID           uint
-	BackgroundStatus int //0:color ; 1:URL image ; 2:customize image
-}
-
 //注册
-func AddNewUser(password string, username string, authority int) (tempUser *User,ok bool) {
+func AddNewUser(password string, username string, authority int) (tempUser *User, ok bool) {
 	tx := DB.Begin()
 	tempUser = &User{
 		//Model:     gorm.Model{},
@@ -27,16 +21,16 @@ func AddNewUser(password string, username string, authority int) (tempUser *User
 	if tx.Create(tempUser).RowsAffected != 1 {
 		tx.Rollback()
 		ok = false
-		return nil,ok
+		return nil, ok
 	}
 	tx.Commit()
 	ok = true
-	return tempUser,ok
+	return tempUser, ok
 }
 
 //登陆,返回 ok==false 代表失败
-func FindUser(password string, username string) (tempUser *User,ok bool){
-	DB.Where("username = ? AND password = ?",username,password).Find(tempUser)
+func FindUser(password string, username string) (tempUser *User, ok bool) {
+	DB.Where("username = ? AND password = ?", username, password).Find(tempUser)
 	if tempUser.ID <= 0 {
 		ok = false
 		return

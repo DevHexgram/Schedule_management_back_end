@@ -2,8 +2,8 @@ package routers
 
 import (
 	"github.com/DevHexgram/Schedule_management_back_end/middleware"
-	"github.com/gin-gonic/gin"
 	"github.com/DevHexgram/Schedule_management_back_end/routers/api"
+	"github.com/gin-gonic/gin"
 )
 
 func RouterInit() *gin.Engine {
@@ -22,7 +22,7 @@ func RouterInit() *gin.Engine {
 	image := r.Group("/backgroundImage")
 	//image.Use(JWT())
 	{
-		image.GET("", s.getImage)
+		image.GET("", api.GetImage)
 	}
 
 	auth := r.Group("/auth")
@@ -31,11 +31,11 @@ func RouterInit() *gin.Engine {
 		auth.POST("/register", middleware.RequestEntryDefault(api.Register))
 	}
 
-	userStatus := r.Group("/userStatus")
+	userStatus := r.Group("/userSetting")
 	userStatus.Use(middleware.JWT())
 	{
-		userStatus.POST("", middleware.RequestEntryWithStatus(s.modifyUserStatus)) //改
-		userStatus.GET("", middleware.RequestEntryWithStatus(s.getUserStatus))     //查
+		userStatus.POST("", middleware.RequestEntryWithStatus(api.ModifyUserSetting)) //改
+		userStatus.GET("", middleware.RequestEntryWithStatus(api.GetUserSetting))     //查
 	}
 
 	all := r.Group("/all")
@@ -48,18 +48,18 @@ func RouterInit() *gin.Engine {
 	operaDaily := r.Group("/operaDaily")
 	operaDaily.Use(middleware.JWT())
 	{
-		operaDaily.POST("/add", middleware.RequestEntryWithStatus(s.addDailyEvents))
-		operaDaily.DELETE("", middleware.RequestEntryWithStatus(s.deleteDailyEvents))
-		operaDaily.PUT("", middleware.RequestEntryWithStatus(s.modifyDailyEvents))
+		operaDaily.POST("/add", middleware.RequestEntryWithStatus(api.AddDailyAffair))
+		operaDaily.DELETE("", middleware.RequestEntryWithStatus(api.DeleteDailyAffair))
+		operaDaily.PUT("", middleware.RequestEntryWithStatus(api.ModifyDailyAffair))
 		//operaDaily.GET()
 	}
 
 	opera := r.Group("/opera")
 	opera.Use(middleware.JWT())
 	{
-		opera.POST("/add", middleware.RequestEntryWithStatus(s.addAffair))  //增
-		opera.DELETE("", middleware.RequestEntryWithStatus(s.deleteAffair)) //删
-		opera.PUT("", middleware.RequestEntryWithStatus(s.modifyAffair))    //改
+		opera.POST("/add", middleware.RequestEntryWithStatus(api.AddAffair))  //增
+		opera.DELETE("", middleware.RequestEntryWithStatus(api.DeleteAffair)) //删
+		opera.PUT("", middleware.RequestEntryWithStatus(api.ModifyAffair))    //改
 		//opera.GET("/find", s.findAffair) //查
 	}
 
@@ -68,6 +68,3 @@ func RouterInit() *gin.Engine {
 	//DealError(err)
 	return r
 }
-
-
-
