@@ -29,14 +29,17 @@ func AddNewUser(password string, username string, authority int) (tempUser *User
 }
 
 //登陆,返回 ok==false 代表失败
-func FindUser(password string, username string) (tempUser *User, ok bool) {
+func FindUser(password string, username string) (*User, bool) {
+	var ok bool
+	tempUser := new(User)
+
 	DB.Where("username = ? AND password = ?", username, password).Find(tempUser)
 	if tempUser.ID <= 0 {
 		ok = false
-		return
+		return nil,ok
 	}
 	ok = true
-	return
+	return tempUser,ok
 }
 
 //查重,重复了返回true,无重复返回false

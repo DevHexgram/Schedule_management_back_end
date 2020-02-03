@@ -11,10 +11,25 @@ type userSetting struct {
 	BackgroundSetting int //0:color ; 1:URL image ; 2:customize image
 }
 
+func AddUserSetting(userId uint) (ok bool) {
+	tx := DB.Begin()
+	if tx.Create(&userSetting{
+		UserID:           userId,
+		BackgroundSetting: 0,
+	}).RowsAffected != 1 {
+		tx.Rollback()
+		ok = false
+		return
+	}
+	tx.Commit()
+	ok = true
+	return
+}
+
 //获取用户设置
 func GetUserSetting(userId int) (*userSetting,error) {
 	temp := new(userSetting)
-	DB.Table("user_statuses").Where("user_id = ?", userId).Find(temp)
+	DB.Table("user_settings").Where("user_id = ?", userId).Find(temp)
 	if temp.ID <= 0 {
 		return nil,errors.New("NotFound")
 	}

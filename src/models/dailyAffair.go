@@ -22,7 +22,7 @@ type dailyOutput struct {
 
 func GetAllDailyAffair(userId int) interface{} {
 	data := make([]*dailyAffair, 0, 100)
-	DB.Table("daily_events").Where("user_id = ?", userId).Find(&data)
+	DB.Table("daily_affairs").Where("user_id = ?", userId).Find(&data)
 
 	out := make([]*dailyOutput, 0, 100)
 	for _, v := range data {

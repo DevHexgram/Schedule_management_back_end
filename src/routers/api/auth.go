@@ -18,10 +18,14 @@ func Register(c *gin.Context) (int, interface{}) {
 	tempUser := new(InputUser)
 	err := c.BindJSON(tempUser)
 	if err != nil || tempUser.Username == "" || tempUser.Password == "" {
-		return util.MakeErrorReturn(400, 40000, "Wrong Format of JSON")
+		return util.MakeErrorReturn(e.BadRequest, 40000, e.GetMsg(40000))
 	}
 
 	//验证邀请码
+	isFound := models.FindInvitationCode(tempUser.Code)
+	if isFound == false {
+		return util.MakeErrorReturn(e.NotFound,40420,e.GetMsg(40420))
+	}
 
 	//用户名是否重复
 	isRepeat := models.FindRepeatUser(tempUser.Username)
@@ -29,8 +33,14 @@ func Register(c *gin.Context) (int, interface{}) {
 		return util.MakeErrorReturn(e.BadRequest, 40030, e.GetMsg(40030))
 	}
 
-	//插入数据库
+	//用户插入数据库
 	dBUser,ok := models.AddNewUser(tempUser.Password, tempUser.Username, 3)
+	if ok == false {
+		return util.MakeErrorReturn(e.InternalServerError, 50000, e.GetMsg(50000))
+	}
+
+	//生成用户设置字段
+	ok = models.AddUserSetting(dBUser.ID)
 	if ok == false {
 		return util.MakeErrorReturn(e.InternalServerError, 50000, e.GetMsg(50000))
 	}
