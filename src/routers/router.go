@@ -31,11 +31,21 @@ func RouterInit() *gin.Engine {
 		auth.POST("/register", middleware.RequestEntryDefault(api.Register))
 	}
 
-	userStatus := r.Group("/userSetting")
-	userStatus.Use(middleware.JWT())
+	userSetting := r.Group("/userSetting")
+	userSetting.Use(middleware.JWT())
 	{
-		userStatus.POST("", middleware.RequestEntryWithStatus(api.ModifyUserSetting)) //改
-		userStatus.GET("", middleware.RequestEntryWithStatus(api.GetUserSetting))     //查
+		userSetting.POST("", middleware.RequestEntryWithStatus(api.ModifyUserSetting)) //改
+		userSetting.GET("", middleware.RequestEntryWithStatus(api.GetUserSetting))     //查
+	}
+
+	article := r.Group("/article")
+	article.Use(middleware.JWT())
+	{
+		article.GET("/allTag",middleware.RequestEntryWithStatus(api.GetAllTag))//获取所有文章标签
+		article.GET("",middleware.RequestEntryWithStatus(api.GetArticle))//获取指定文章
+		article.POST("",middleware.RequestEntryWithStatus(api.AddArticle))//添加文章
+		//article.DELETE("",middleware.RequestEntryWithStatus(api.DeleteArticle))//删除文章
+		//article.PUT("",middleware.RequestEntryWithStatus(api.ModifyArticle))//修改文章
 	}
 
 	all := r.Group("/all")

@@ -33,4 +33,7 @@ func init() {
 
 	DB.AutoMigrate(&User{})
 	DB.AutoMigrate(&userSetting{})
+
+	DB.AutoMigrate(&ArticleTag{})
+	DB.AutoMigrate(&Article{})
 }

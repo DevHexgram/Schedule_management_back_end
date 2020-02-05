@@ -13,7 +13,7 @@ type dailyAffair struct {
 	UserId uint
 }
 
-type dailyOutput struct {
+type outputDaily struct {
 	ID        uint   `json:"id"`
 	Title     string `json:"title"`
 	Extra     string `json:"extra"`
@@ -24,9 +24,9 @@ func GetAllDailyAffair(userId int) interface{} {
 	data := make([]*dailyAffair, 0, 100)
 	DB.Table("daily_affairs").Where("user_id = ?", userId).Find(&data)
 
-	out := make([]*dailyOutput, 0, 100)
+	out := make([]*outputDaily, 0, 100)
 	for _, v := range data {
-		out = append(out, &dailyOutput{
+		out = append(out, &outputDaily{
 			ID:        v.ID,
 			Title:     v.Title,
 			Extra:     v.Extra,

@@ -290,6 +290,20 @@ Success(200):
 ```
 
 
+## 操作文章
+
+
+#### POST `/article`
+
+Payload:
+```json
+{
+	"tag_name":"test_max_length", //相当于标题
+	"article_body":"哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈" //最多1500字
+}
+```
+
+
 ## 获取随机背景图片
 
 

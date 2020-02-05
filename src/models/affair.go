@@ -15,7 +15,7 @@ type affair struct {
 	UserId uint
 }
 
-type output struct {
+type outputAffair struct {
 	ID        uint   `json:"id"`
 	Title     string `json:"title"`
 	Deadline  string `json:"deadline"`
@@ -27,9 +27,9 @@ func GetAllAffairs(userId int) interface{} {
 	data := make([]*affair, 0, 100)
 	DB.Table("affairs").Where("user_id = ?", userId).Find(&data)
 
-	out := make([]*output, 0, 100)
+	out := make([]*outputAffair, 0, 100)
 	for _, v := range data {
-		out = append(out, &output{
+		out = append(out, &outputAffair{
 			ID:        v.ID,
 			Title:     v.Title,
 			Deadline:  v.Deadline.Format("2006-01-02 15:04:05"),
