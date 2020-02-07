@@ -41,11 +41,12 @@ func RouterInit() *gin.Engine {
 	article := r.Group("/article")
 	article.Use(middleware.JWT())
 	{
-		article.GET("/allTag",middleware.RequestEntryWithStatus(api.GetAllTag))//获取所有文章标签
-		article.GET("",middleware.RequestEntryWithStatus(api.GetArticle))//获取指定文章
-		article.POST("",middleware.RequestEntryWithStatus(api.AddArticle))//添加文章
-		//article.DELETE("",middleware.RequestEntryWithStatus(api.DeleteArticle))//删除文章
-		//article.PUT("",middleware.RequestEntryWithStatus(api.ModifyArticle))//修改文章
+		article.GET("/allTag", middleware.RequestEntryWithStatus(api.GetAllTag))      //获取所有文章标签
+		article.GET("", middleware.RequestEntryWithStatus(api.GetArticle))            //获取指定文章
+		article.POST("", middleware.RequestEntryWithStatus(api.AddArticle))           //添加文章
+		article.DELETE("", middleware.RequestEntryWithStatus(api.DeleteArticle))      //删除文章
+		article.PUT("", middleware.RequestEntryWithStatus(api.ModifyArticle)) //修改文章
+		article.PUT("/tag", middleware.RequestEntryWithStatus(api.ModifyTag))         //修改标题
 	}
 
 	all := r.Group("/all")
