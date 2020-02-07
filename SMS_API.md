@@ -11,6 +11,7 @@
     - [总事务获取](#总事务获取)
     - [操作事务](#操作事务)
     - [操作每日任务](#操作每日任务)
+    - [操作文章](#操作文章)
 - [获取随机背景图片](#获取随机背景图片)
 - [错误码对照表](#错误码对照表)
 
@@ -293,13 +294,112 @@ Success(200):
 ## 操作文章
 
 
-#### POST `/article`
+#### GET `/article/allTag` 获取所有文章标题
+
+Success(200):
+```json
+{
+    "data": [
+        {
+            "TagId": 1,
+            "CreatedAt": "2020-02-05T11:40:17+08:00",
+            "UpdateAt": "2020-02-05T11:40:17+08:00",
+            "Name": "12345",
+            "CreatedBy": "tester",
+            "ModifiedBy": "tester"
+        },
+        {
+            "TagId": 11,
+            "CreatedAt": "2020-02-06T17:43:22+08:00",
+            "UpdateAt": "2020-02-06T17:43:22+08:00",
+            "Name": "1111111111111s",
+            "CreatedBy": "tester",
+            "ModifiedBy": "tester"
+        }
+    ],
+    "error": 0,
+    "msg": "success"
+}
+```
+
+#### GET `/article` 获取指定文章(通过tag_id)
+
+Query:
+
+* `tag_id` 标题ID
+
+Success(200):
+```json
+{
+    "data": {
+        "TagId": 11,
+        "ArticleBody": "哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈33333"
+    },
+    "error": 0,
+    "msg": "success"
+}
+```
+
+#### POST `/article` 添加文章
 
 Payload:
 ```json
 {
 	"tag_name":"test_max_length", //相当于标题
 	"article_body":"哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈" //最多1500字
+}
+```
+
+#### DELETE `/article` 删除文章
+
+Query:
+
+* `tag_id` 标题ID
+
+Success(200):
+```json
+{
+    "data": "",
+    "error": 0,
+    "msg": "success"
+}
+```
+
+#### PUT `/article` 修改文章内容
+
+Query:
+
+* `tag_id` 标题ID
+
+Payload:
+```json
+{
+	"article_body":"test"
+}
+```
+
+Success(200):
+```json
+{
+    "data": "",
+    "error": 0,
+    "msg": "success"
+}
+```
+
+#### PUT `/article/tag` 修改文章标题
+
+Query:
+
+* tag_id 标题ID
+* tag_name 新的标题名称
+
+Success(200):
+```json
+{
+    "data": "",
+    "error": 0,
+    "msg": "success"
 }
 ```
 
